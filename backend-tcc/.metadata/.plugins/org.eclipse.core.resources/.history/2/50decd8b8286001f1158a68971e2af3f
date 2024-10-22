@@ -1,0 +1,67 @@
+package br.itb.projeto.CentroArtesMarciais.rest.controller;
+
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import br.itb.projeto.CentroArtesMarciais.model.entity.Membro;
+import br.itb.projeto.CentroArtesMarciais.service.MembroService;
+
+@RestController
+@RequestMapping("/Membro/")
+public class MembroController {
+
+	private MembroService membroService;
+
+	public MembroController(MembroService membroService) {
+		super();
+		this.membroService = membroService;
+	}
+
+	@GetMapping("findAll")
+	public ResponseEntity<List<Membro>> findAll() {
+		List<Membro> membros = membroService.findAll();
+
+		return new ResponseEntity<List<Membro>>(membros, HttpStatus.OK);
+
+	}
+
+	@GetMapping("findById/{id}")
+	public ResponseEntity<Membro> findById(@PathVariable long id) {
+		Membro membro = membroService.findById(id);
+
+		return new ResponseEntity<Membro>(membro, HttpStatus.OK);
+	}
+
+	@PostMapping("create")
+	public ResponseEntity<Membro> create(@RequestBody Membro membro) {
+
+		Membro _membro = membroService.create(membro);
+
+		return new ResponseEntity<Membro>(_membro, HttpStatus.OK);
+	}
+	
+	@PutMapping("inativar/{id}")
+	public ResponseEntity<Membro> inativar(@PathVariable long id) {
+
+		Membro membro = membroService.inativar(id);
+
+		return new ResponseEntity<Membro>(membro, HttpStatus.OK);
+	}
+
+	@PutMapping("reativar/{id}")
+	public ResponseEntity<Membro> reativar(@PathVariable long id) {
+
+		Membro membro = membroService.reativar(id);
+
+		return new ResponseEntity<Membro>(membro, HttpStatus.OK);
+	}
+}

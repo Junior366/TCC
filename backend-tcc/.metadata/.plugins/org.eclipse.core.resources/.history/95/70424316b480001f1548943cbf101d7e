@@ -1,0 +1,65 @@
+package br.itb.projeto.CentroArtesMarciais.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import br.itb.projeto.CentroArtesMarciais.model.entity.Turma;
+import br.itb.projeto.CentroArtesMarciais.model.repository.TurmaRepository;
+import jakarta.transaction.Transactional;
+
+@Service
+public class TurmaService {
+	private TurmaRepository turmaRepository;
+
+	public TurmaService(TurmaRepository turmaRepository) {
+		super();
+		this.turmaRepository = turmaRepository;
+
+	}
+	public List<Turma> findAll() {
+		List<Turma> turmas = turmaRepository.findAll();
+
+		return turmas;
+	}
+
+	public Turma findById(long id) {
+		Turma turma = turmaRepository.findById(id).orElseThrow();
+
+		return turma;
+	}
+	
+	@Transactional
+	public Turma create(Turma turma) {
+		turma.setStatusTurma("ATIVO");
+		return turmaRepository.save(turma);
+}
+	@Transactional
+	public Turma inativar(long id) {
+		Optional<Turma> _turma = 
+				turmaRepository.findById(id);
+		
+		if (_turma.isPresent()) {
+			Turma turmaAtualizada = _turma.get();
+			turmaAtualizada.setStatusTurma("INATIVO");
+			
+			return turmaRepository.save(turmaAtualizada);
+		}
+		return null; 
+	}
+	
+	@Transactional
+	public Turma reativar(long id) {
+		Optional<Turma> _turma = 
+				turmaRepository.findById(id);
+		
+		if (_turma.isPresent()) {
+			Turma turmaAtualizado = _turma.get();
+			turmaAtualizado.setStatusTurma("ATIVO");
+			
+			return turmaRepository.save(turmaAtualizado);
+		}
+		return null;
+ }
+}

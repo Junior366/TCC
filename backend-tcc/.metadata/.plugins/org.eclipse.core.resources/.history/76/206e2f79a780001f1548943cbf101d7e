@@ -1,0 +1,68 @@
+package br.itb.projeto.CentroArtesMarciais.rest.controller;
+
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import br.itb.projeto.CentroArtesMarciais.model.entity.Mensalidade;
+import br.itb.projeto.CentroArtesMarciais.service.MensalidadeService;
+
+@RestController
+@RequestMapping("/Mensalidade/")
+public class MensalidadeController {
+
+	private MensalidadeService mensalidadeService;
+
+	public MensalidadeController(MensalidadeService mensalidadeService) {
+		super();
+		this.mensalidadeService = mensalidadeService;
+
+	}
+
+	@GetMapping("findAll")
+	public ResponseEntity<List<Mensalidade>> findAll() {
+		List<Mensalidade> mensalidades = mensalidadeService.findAll();
+
+		return new ResponseEntity<List<Mensalidade>>(mensalidades, HttpStatus.OK);
+
+	}
+	@GetMapping("findById/{id}")
+	public ResponseEntity<Mensalidade> findById(@PathVariable long id) {
+		Mensalidade mensalidade = mensalidadeService.findById(id);
+
+		return new ResponseEntity<Mensalidade>(mensalidade, HttpStatus.OK);
+	}
+
+	@PostMapping("create")
+	public ResponseEntity<Mensalidade> create(@RequestBody Mensalidade mensalidade) {
+
+		Mensalidade _mensalidade = mensalidadeService.create(mensalidade);
+
+		return new ResponseEntity<Mensalidade>(_mensalidade, HttpStatus.OK);
+	}
+	
+	@PutMapping("inativar/{id}")
+	public ResponseEntity<Mensalidade> inativar(@PathVariable long id) {
+
+		Mensalidade mensalidade = mensalidadeService.inativar(id);
+
+		return new ResponseEntity<Mensalidade>(mensalidade, HttpStatus.OK);
+	}
+
+	@PutMapping("reativar/{id}")
+	public ResponseEntity<Mensalidade> reativar(@PathVariable long id) {
+
+		Mensalidade mensalidade = mensalidadeService.reativar(id);
+
+		return new ResponseEntity<Mensalidade>(mensalidade, HttpStatus.OK);
+	}
+}
+

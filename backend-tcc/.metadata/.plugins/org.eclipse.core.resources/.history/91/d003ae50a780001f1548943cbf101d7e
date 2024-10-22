@@ -1,0 +1,81 @@
+package br.itb.projeto.CentroArtesMarciais.model.entity;
+
+import java.time.LocalDate;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "Mensalidade")
+public class Mensalidade {
+	@Id
+	@GeneratedValue
+	  (strategy = GenerationType.IDENTITY)
+	private long id;
+	private String valor;
+	private LocalDate dataPgto;
+	private LocalDate dataVcto;
+	private String statusPgto;
+	
+	@ManyToOne
+	@JoinColumn(name = "membro_id")
+	private Membro membro;
+	
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getValor() {
+		return valor;
+	}
+
+	public void setValor(String valor) {
+		this.valor = valor;
+	}
+
+	public LocalDate getDataPgto() {
+		return dataPgto;
+	}
+
+	public void setDataPgto(LocalDate dataPgto) {
+		this.dataPgto = dataPgto;
+	}
+
+	public LocalDate getDataVcto() {
+		return dataVcto;
+	}
+
+	public void setDataVcto(LocalDate dataVcto) {
+		this.dataVcto = dataVcto;
+	}
+
+	public String getStatusPgto() {
+		return statusPgto;
+	}
+
+	public void setStatusPgto(String statusPgto) {
+		this.statusPgto = statusPgto;
+	}
+
+	public Membro getMembro() {
+		return membro;
+	}
+
+	public void setMembro(Membro membro) {
+		this.membro = membro;
+	}
+
+	public void setStatusMensalidade(String string) {
+		// TODO Auto-generated method stub
+		
+	}	
+}

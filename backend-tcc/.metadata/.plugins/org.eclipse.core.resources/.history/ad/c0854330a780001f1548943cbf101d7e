@@ -1,0 +1,71 @@
+package br.itb.projeto.CentroArtesMarciais.service;
+
+import java.util.Base64;
+import java.util.List;
+
+import org.apache.el.stream.Optional;
+import org.springframework.stereotype.Service;
+
+import br.itb.projeto.CentroArtesMarciais.model.entity.Membro;
+import br.itb.projeto.CentroArtesMarciais.model.entity.MembroTurma;
+import br.itb.projeto.CentroArtesMarciais.model.entity.Usuario;
+import br.itb.projeto.CentroArtesMarciais.model.repository.MembroTurmaRepository;
+import jakarta.transaction.Transactional;
+
+@Service
+public class MembroTurmaService {
+	private MembroTurmaRepository membroTurmaRepository;
+
+	public MembroTurmaService(MembroTurmaRepository membroTurmaRepository) {
+		super();
+		this.membroTurmaRepository = membroTurmaRepository;
+	}
+	public List<MembroTurma> findAll() {
+		List<MembroTurma> MembroTurmas = membroTurmaRepository.findAll();
+
+		return MembroTurmas;
+	}
+
+	public MembroTurma findById(long id) {
+		MembroTurma membroTurma = membroTurmaRepository.findById(id).orElseThrow();
+
+		return membroTurma;
+	}
+	@Transactional
+	public MembroTurma create(MembroTurma membroTurma) {
+		membroTurma.setStatusMembroTurma("ATIVO");
+		return membroTurmaRepository.save(membroTurma);
+}
+	@Transactional
+	public MembroTurma inativar(long id) {
+		Optional<MembroTurma> _membroTurma = 
+				membroTurmaRepository.findById(id);
+		
+		if (_membroTurma.isPresent()) {
+			MembroTurma membroTurmaAtualizada = _membroTurma.get();
+			membroTurmaAtualizada.setStatusMembroTurma("INATIVO");
+			
+			return membroTurmaRepository.save(membroTurmaAtualizada);
+		}
+		return null;
+	}
+	
+	@Transactional
+	public MembroTurma reativar(long id) {
+		Optional<MembroTurma> _membroTurma = 
+				membroTurmaRepository.findById(id);
+		
+		if (_membroTurma.isPresent()) {
+			MembroTurma membroTurmaAtualizado = _membroTurma.get();
+			membroTurmaAtualizado.setStatusMembroTurma("ATIVO");
+			
+			return membroTurmaRepository.save(membroTurmaAtualizado);
+		}
+		return null;
+	}
+	
+ }
+
+
+
+
