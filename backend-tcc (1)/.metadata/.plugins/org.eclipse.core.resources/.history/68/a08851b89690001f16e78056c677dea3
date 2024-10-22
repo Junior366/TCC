@@ -1,0 +1,5 @@
+package br.itb.projeto.CentroArtesMarciais.service;
+
+public class ServiceBase {
+
+}

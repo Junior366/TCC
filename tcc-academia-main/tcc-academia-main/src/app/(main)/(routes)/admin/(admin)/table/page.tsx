@@ -1,9 +1,10 @@
-import AdminTable from "@/components/admin/table/AdminTable";
+"use client"
+import UsuarioTable from "@/components/admin/table/UsuarioTable";
 
 export default function TableAdmin() {
   return (
     <>
-    <AdminTable />
+    <UsuarioTable />
     </>
   )
 }
