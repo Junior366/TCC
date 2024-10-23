@@ -5,5 +5,6 @@ export const Backlinks = [
   { title: 'Modalidades', url: '/modalidades' },
   { title: "Perfil", url: "/perfil", requerLogin: true },
   { title: "Usuarios", url: "/admin/table", nivelAdmin: true },
-  { title: "Mensagens", url: "/admin/mensagem", nivelAdmin: true}
+  { title: "Mensagens", url: "/admin/mensagem", nivelAdmin: true},
+  { title: "Modalidades Tabela", url: "/admin/Modalidades", nivelAdmin: true},
 ]

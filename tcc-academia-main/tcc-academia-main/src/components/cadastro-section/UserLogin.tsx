@@ -1,19 +1,28 @@
 "use client"
 import { ChangeEvent, useState } from 'react';
-import { Button } from '../ui/button'
-import { Input } from '../ui/input'
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
 import UsuarioService from '@/services/UsuarioService';
-import { Target } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { Navigate, useNavigate } from 'react-router-dom';
-
 
 export default function UserCadastro() {
   const router = useRouter();
   
-  const [formData, setFormData] = useState<
-    { nome: string; email: string; password: string; dataNasc: Date; nivelAcesso: string; }>
-      ({ nome: '', email: '', password: '',  dataNasc: new Date (), nivelAcesso: ''});
+  const [formData, setFormData] = useState<{
+    nome: string;
+    email: string;
+    password: string;
+    dataNasc: Date;
+    nivelAcesso: string;
+  }>({
+    nome: '',
+    email: '',
+    password: '',
+    dataNasc: new Date(),
+    nivelAcesso: ''
+  });
+  
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [message, setMessage] = useState<string>('');
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -25,17 +34,25 @@ export default function UserCadastro() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    UsuarioService.create(formData).then(
-      (response) => {
-        setMessage(response.data.message);
-        ('/profile')
+    if (formData.password !== confirmPassword) {
+      setMessage("As senhas não coincidem.");
+      return;
+    }
 
+    UsuarioService.create({
+      ...formData,
+      dataNasc: formData.dataNasc.toISOString().substring(0, 10)
+    }).then(
+      (response) => {
+        console.log(response);
+        setMessage("Cadastro realizado com sucesso!");
+        router.push('/login');
       }, (error) => {
         const message = error.response.data.message;
         setMessage(message);
-        router.push("/")
+        router.push("/");
       }
-    )
+    );
   }
 
   return (
@@ -46,6 +63,7 @@ export default function UserCadastro() {
           <h2 className="pb-14 pt-12 text-2xl font-semibold text-black">
             Cadastro
           </h2>
+          {message && <p className="text-red-500">{message}</p>} {/* Mensagem de feedback */}
           <div className="flex w-full flex-col items-center justify-center gap-y-4 pb-14">
             <div className="w-[350px]">
               <Input
@@ -75,7 +93,7 @@ export default function UserCadastro() {
                 placeholder="senha"
                 className="w-full rounded-[5px] border border-none bg-[#F5F5F5] font-bold text-[#A2A7A9]" required
                 onChange={handleChange}
-                name="senha"
+                name="password"
               />
             </div>
           </div>
@@ -87,6 +105,8 @@ export default function UserCadastro() {
               id="confirm-password"
               placeholder="Confirmar Senha"
               className="w-full rounded-[5px] border border-none bg-[#F5F5F5] font-bold text-[#A2A7A9] p-2" required
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              value={confirmPassword}
             />
           </div>
 
@@ -96,8 +116,10 @@ export default function UserCadastro() {
             </label>
             <div className="flex justify-between">
               <select
-              onChange={(e)=>{formData.dataNasc.setDate(parseInt(e.target.value))
-                setFormData({...formData})}}
+                onChange={(e) => {
+                  formData.dataNasc.setDate(parseInt(e.target.value));
+                  setFormData({ ...formData });
+                }}
                 value={formData.dataNasc.getDate()}
                 id="day"
                 className="w-[30%] rounded-[5px] border border-none bg-[#F5F5F5] font-bold text-[#A2A7A9] p-2" required
@@ -113,11 +135,12 @@ export default function UserCadastro() {
               <select
                 id="month"
                 className="w-[30%] rounded-[5px] border border-none bg-[#F5F5F5] font-bold text-[#A2A7A9] p-2" required
-                onChange={(e)=>{formData.dataNasc.setMonth(parseInt(e.target.value))
-                  setFormData({...formData})}}
-                  value={formData.dataNasc.getMonth()}
+                onChange={(e) => {
+                  formData.dataNasc.setMonth(parseInt(e.target.value));
+                  setFormData({ ...formData });
+                }}
+                value={formData.dataNasc.getMonth()}
               >
-                
                 <option value="">Mês</option>
                 {[
                   "Janeiro",
@@ -141,12 +164,11 @@ export default function UserCadastro() {
               <select
                 id="year"
                 className="w-[30%] rounded-[5px] border border-none bg-[#F5F5F5] font-bold text-[#A2A7A9] p-2" required
-                onChange={(e)=>{
-                  console.log(e.target.value)
-                  formData.dataNasc.setFullYear(parseInt(e.target.value))
-                  console.log(formData.dataNasc.getFullYear())
-                  setFormData({...formData})}}
-                  value={formData.dataNasc.getFullYear()}
+                onChange={(e) => {
+                  formData.dataNasc.setFullYear(parseInt(e.target.value));
+                  setFormData({ ...formData });
+                }}
+                value={formData.dataNasc.getFullYear()}
               >
                 <option value="">Ano</option>
                 {Array.from({ length: 100 }, (_, i) => (

@@ -1,11 +1,9 @@
 "use client"; // Adicione esta linha
 
 import { ChangeEvent, useState } from 'react';
-
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import UsuarioService from '../../services/UsuarioService';
-import { useNavigate } from 'react-router-dom';
 import { useRouter } from 'next/navigation';
 
 export default function UserLogin() {
@@ -27,19 +25,18 @@ export default function UserLogin() {
         try {
             await UsuarioService.signin(formData.email, formData.password);
             const userJson = localStorage.getItem("user");
-            console.log(userJson);
             const user = JSON.parse(userJson || '{}');
 
-            if (user.statusUsuario === 'ATIVO') {
-                alert("Usuario Aceito com Sucesso");
+            if (user.status === 'ATIVO') {
+                setMessage("Usuário aceito com sucesso!");
                 router.replace("/");
-            } else if (user.statusUsuario === 'TROCAR_SENHA') {
-              alert("Usuario Recusado");
+            } else if (user.status === 'TROCAR_SENHA') {
+                setMessage("Usuário recusado. É necessário trocar a senha.");
+            } else {
+                setMessage("Status do usuário desconhecido.");
             }
         } catch (error) {
-            const respMessage =
-                console.log("Erros");
-                
+            setMessage("E-mail ou senha incorretos.");
         }
     };
 
@@ -47,9 +44,7 @@ export default function UserLogin() {
         <section className="flex h-screen items-center justify-center bg-gradient-to-b from-[#D81313] to-white">
             <div className="flex w-full max-w-[1800px] flex-col items-center justify-center p-10">
                 <div className="flex h-auto w-[500px] flex-col items-center justify-center rounded-bl-[8px] rounded-br-[50px] rounded-tl-[50px] rounded-tr-[8px] border bg-white p-5 shadow-lg">
-                    <h2 className="pb-14 pt-12 text-2xl font-semibold text-black">
-                        Login
-                    </h2>
+                    <h2 className="pb-14 pt-12 text-2xl font-semibold text-black">Login</h2>
                     <form className="flex w-full flex-col items-center justify-center gap-y-4 pb-14" onSubmit={handleSubmit}>
                         <div className="w-[350px]">
                             <Input
@@ -69,6 +64,7 @@ export default function UserLogin() {
                                 onChange={handleChange}
                             />
                         </div>
+                        {message && <p className="text-red-500">{message}</p>} {/* Mensagem de feedback */}
                         <div className="pb-10">
                             <Button type="submit" className="h-[35px] w-[150px] rounded-[4px] bg-[#D81313] font-semibold text-white shadow-sm">
                                 Entrar

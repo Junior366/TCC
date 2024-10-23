@@ -21,6 +21,8 @@ export default <Data extends Record<string,any>, Cabecalho extends string[]>({ca
   useEffect(() => {
     obter()
   }, [])
+  console.log(items)
+
     return (
         <div>
             <div>
@@ -43,7 +45,10 @@ export default <Data extends Record<string,any>, Cabecalho extends string[]>({ca
                             {celulas.map(celula => <TableCell>{item[celula instanceof Array ? celula[0] :  celula]}</TableCell>)}
                             <TableCell>
                                 <Button><Link href={rota + `/editar/${item.id}`}>editar</Link></Button>
-                                <Button>deletar</Button>
+                                <Button onClick={async () => {
+                                    await  service.deletar(item.id)
+                                    obter()
+                                }}>deletar</Button>
                             </TableCell>
                         </TableRow>)}
                         
